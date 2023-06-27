@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Éditeur de Texte</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    
+    #toolbar {
+      background-color: #eee;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+    }
+    
+    #editor {
+      width: 80%;
+      height: 400px;
+      margin: 0 auto;
+      border: 1px solid #ccc;
+      padding: 10px;
+      font-size: 16px;
+    }
+    
+    #editor:focus {
+      outline: none;
+      border-color: #333;
+    }
+    
+    #file-input {
+      display: none;
+    }
+    
+    #file-label {
+      margin-right: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    #file-label:hover {
+      text-decoration: underline;
+    }
+    
+    button {
+      background-color: #333;
+      color: #fff;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    
+    select {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="toolbar">
+    <label id="file-label" for="file-input"></label>
+    <input type="file" id="file-input" accept=".txt" />
+    <button id="save-button">Enregistrer sous</button>
+    <button onclick="document.execCommand('bold', false, null)">Gras</button>
+    <button onclick="document.execCommand('italic', false, null)">Italique</button>
+    <button onclick="document.execCommand('underline', false, null)">Souligne</button>
+    <select onchange="document.execCommand('foreColor', false, this.value)">
+      <option value="">Couleur du Texte</option>
+      <option value="red">Rouge</option>
+      <option value="green">Vert</option>
+      <option value="blue">Bleu</option>
+      <option value="black">Noir</option>
+      <option value="yellow">Jaune</option>
+      <option value="gray">Gris</option>
+      <option value="pink">Rose</option>
+      <option value="lightblue">Bleu clair</option>
+    </select>
+    <select onchange="document.execCommand('backColor', false, this.value)">
+      <option value="">Arriere-plan du texte</option>
+      <option value="yellow">Jaune</option>
+      <option value="gray">Gris</option>
+      <option value="pink">Rose</option>
+      <option value="lightblue">Bleu clair</option>
+      <option value="red">Rouge</option>
+      <option value="green">Vert</option>
+      <option value="blue">Bleu</option>
+      <option value="black">Noir</option>
+    </select>
+    <select onchange="document.execCommand('fontName',  false, this.value)">
+      <option value="Arial">Arial</option>
+      <option value="Courier">Courier</option>
+      <option value="Times New Roman">Times New Roman</option>
+      <option value="Verdana">Verdana</option>
+      <option value="Comic Sans MS">Comic Sans MS</option>
+      <option value="Impact">Impact</option>
+      <option value="Georgia">Georgia</option>
+      <option value="Lucida Console">Lucida Console</option>
+      </select>
+      <button id="open-file-button">Ouvrir un fichier</button>
+    </select>
+  </div>
+  <div id="editor" contenteditable="true">
+    ecloud
+  </div>
+  <script>
+    var editor = document.getElementById("editor");
+    var saveButton = document.getElementById("save-button");
+    var openFileButton = document.getElementById("open-file-button");
+  
+    saveButton.addEventListener("click", function() {
+      var text = editor.innerText;
+  
+      var a = document.createElement("a");
+      var file = new Blob([text], {type: "text/plain"});
+      a.href = URL.createObjectURL(file);
+      a.download = "text.txt";
+      a.click();
+    });
+  
+    openFileButton.addEventListener("click", function() {
+      var input = document.createElement('input');
+      input.type = 'file';
+  
+      input.onchange = e => { 
+        var file = e.target.files[0]; 
+        var reader = new FileReader();
+        reader.readAsText(file,'UTF-8');
+        reader.onload = readerEvent => {
+          var content = readerEvent.target.result; 
+          editor.innerText = content;
+        }
+      }
+  
+      input.click();
+    });
+  </script>
+  </body>
+  </html>   
